@@ -211,10 +211,10 @@ python3 ok -q 01 -u --local
 
 **Part A**: Currently, there is no cost for placing any type of `Ant`, and so there is no challenge to the game. The base class `Ant` has a `food_cost` of zero. Override this class attribute for `HarvesterAnt` and `ThrowerAnt` according to the "Food cost" column in the table below.
 
-| **Class**                                                    | **Food Cost** | **Armor** |
-| ------------------------------------------------------------ | ------------- | --------- |
-| <img src="img/ant_harvester.gif" alt="ant_harvester"  /> `HarvesterAnt` | 2             | 1         |
-| <img src="img/ant_thrower.gif" alt="ant_thrower" style="zoom:33%;" /> `ThrowerAnt` | 3             | 1         |
+| **Class**                                                    | **Food Cost** | **Health** |
+| ------------------------------------------------------------ | ------------- | ---------- |
+| <img src="img/ant_harvester.gif" alt="ant_harvester"  /> `HarvesterAnt` | 2             | 1          |
+| <img src="img/ant_thrower.gif" alt="ant_thrower" style="zoom:33%;" /> `ThrowerAnt` | 3             | 1          |
 
 **Part B**: Now that placing an `Ant` costs food, we need to be able to gather more food! To fix this issue, implement the `HarvesterAnt` class. A `HarvesterAnt` is a type of `Ant` that adds one food to the `gamestate.food` total as its `action`.
 
@@ -316,10 +316,10 @@ A `ThrowerAnt` is a powerful threat to the bees, but it has a high food cost. In
 
 Neither of these specialized throwers can `throw_at` a `Bee` that is exactly 4 `Place`s away.
 
-| Class                                                        | Food Cost | Armor |
-| ------------------------------------------------------------ | --------- | ----- |
-| <img src="img/ant_shortthrower.gif" alt="ant_shortthrower" style="zoom:33%;" />`ShortThrower` | 2         | 1     |
-| <img src="img/ant_longthrower.gif" alt="ant_longthrower" style="zoom:33%;" />`LongThrower` | 2         | 1     |
+| Class                                                        | Food Cost | Health |
+| ------------------------------------------------------------ | --------- | ------ |
+| <img src="img/ant_shortthrower.gif" alt="ant_shortthrower" style="zoom:33%;" />`ShortThrower` | 2         | 1      |
+| <img src="img/ant_longthrower.gif" alt="ant_longthrower" style="zoom:33%;" />`LongThrower` | 2         | 1      |
 
 To implement these new throwing ants, your `ShortThrower` and `LongThrower` classes should inherit the `nearest_bee` method from the base `ThrowerAnt` class. The logic of choosing which bee a thrower ant will attack is essentially the same, except the `ShortThrower` and `LongThrower` ants have maximum and minimum ranges, respectively.
 
@@ -363,9 +363,9 @@ Your method needs to also include the reflective damage logic, however:
 
 The `FireAnt` must do its damage *before* being removed from its `place`, so pay careful attention to the order of your logic in the overriden method.
 
-| **Class**                               | **Food Cost** | **Armor** |
-| --------------------------------------- | ------------- | --------- |
-| ![ant_fire](img/ant_fire.gif) `FireAnt` | 5             | 3         |
+| **Class**                               | **Food Cost** | **Health** |
+| --------------------------------------- | ------------- | ---------- |
+| ![ant_fire](img/ant_fire.gif) `FireAnt` | 5             | 3          |
 
 > *Hint:* Do *not* call `self.reduce_health`, or you'll end up stuck in a recursive loop. (Can you see why?)
 >
@@ -405,7 +405,7 @@ python3 gui.py --food 10
 
 ## Phase 3: More Ants!
 
-We now have some great offensive troops to help vanquish the bees, but let's make sure we're also keeping our defensive efforts up. In this phase you will implement ants that have special defensive capabilities such as increased armor and the ability to protect other ants.
+We now have some great offensive troops to help vanquish the bees, but let's make sure we're also keeping our defensive efforts up. In this phase you will implement ants that have special defensive capabilities such as increased health and the ability to protect other ants.
 
 ### Problem 6
 
@@ -417,9 +417,9 @@ python3 ok -q 06 -u --local
 
 We are going to add some protection to our glorious home base by implementing the `WallAnt`, which is an ant that does nothing each turn. A `WallAnt` is useful because it has a large `health` value.
 
-| **Class**                               | **Food Cost** | **Armor** |
-| --------------------------------------- | ------------- | --------- |
-| ![ant_wall](img/ant_wall.gif) `WallAnt` | 4             | 4         |
+| **Class**                               | **Food Cost** | **Health** |
+| --------------------------------------- | ------------- | ---------- |
+| ![ant_wall](img/ant_wall.gif) `WallAnt` | 4             | 4          |
 
 Unlike with previous ants, we have not provided you with a class header. Implement the `WallAnt` class from scratch. Give it a class attribute `name` with the value `'Wall'` (so that the graphics work) and a class attribute `implemented` with the value `True` (so that you can use it in a game).
 
@@ -443,9 +443,9 @@ Implement the `HungryAnt`, which will select a random `Bee` from its `place` and
 
 We have not provided you with a class header. Implement the `HungryAnt` class from scratch. Give it a class attribute `name` with the value `'Hungry'` (so that the graphics work) and a class attribute `implemented` with the value `True` (so that you can use it in a game).
 
-| **Class**                                     | **Food Cost** | **Armor** |
-| --------------------------------------------- | ------------- | --------- |
-| ![ant_hungry](img/ant_hungry.gif) `HungryAnt` | 4             | 1         |
+| **Class**                                     | **Food Cost** | **Health** |
+| --------------------------------------------- | ------------- | ---------- |
+| ![ant_hungry](img/ant_hungry.gif) `HungryAnt` | 4             | 1          |
 
 Give `HungryAnt` a `chew_duration` class attribute that stores the number of turns that it takes a `HungryAnt` to chew (set to 3). Also, give each `HungryAnt` an instance attribute `chewing` that counts the number of turns it has left to chew (initialized to 0, since it hasn't eaten anything at the beginning).
 
@@ -473,9 +473,9 @@ python3 ok -q 08 -u --local
 
 Right now, our ants are quite frail. We'd like to provide a way to help them last longer against the onslaught of the bees. Enter the `BodyguardAnt`.
 
-| **Class**                                                    | **Food Cost** | **Armor** |
-| ------------------------------------------------------------ | ------------- | --------- |
-| <img src="img/ant_bodyguard.gif" alt="ant_bodyguard" style="zoom: 50%;" /> `BodyguardAnt` | 4             | 2         |
+| **Class**                                                    | **Food Cost** | **Health** |
+| ------------------------------------------------------------ | ------------- | ---------- |
+| <img src="img/ant_bodyguard.gif" alt="ant_bodyguard" style="zoom: 50%;" /> `BodyguardAnt` | 4             | 2          |
 
 A `BodyguardAnt` differs from a normal ant because it is a `ContainerAnt`; it can contain another ant and protect it, all in one `Place`. When a `Bee` stings the ant in a `Place` where one ant contains another, only the container is damaged. The ant inside the container can still perform its original action. If the container perishes, the contained ant still remains in the place (and can then be damaged).
 
@@ -532,9 +532,9 @@ python3 ok -q 09 -u --local
 
 The `BodyguardAnt` provides great defense, but they say the best defense is a good offense. The `TankAnt` is a container that protects an ant in its place and also deals 1 damage to all bees in its place each turn.
 
-| **Class**                                                    | **Food Cost** | **Armor** |
-| ------------------------------------------------------------ | ------------- | --------- |
-| <img src="img/ant_tank.gif" alt="ant_tank" style="zoom:50%;" /> `TankAnt` | 6             | 2         |
+| **Class**                                                    | **Food Cost** | **Health** |
+| ------------------------------------------------------------ | ------------- | ---------- |
+| <img src="img/ant_tank.gif" alt="ant_tank" style="zoom:50%;" /> `TankAnt` | 6             | 2          |
 
 We have not provided you with a class header. Implement the `TankAnt` class from scratch. Give it a class attribute `name` with the value `'Tank'` (so that the graphics work) and a class attribute `implemented` with the value `True` (so that you can use it in a game).
 
@@ -592,9 +592,9 @@ python3 ok -q 11 -u --local
 
 Currently there are no ants that can be placed on `Water`. Implement the `ScubaThrower`, which is a subclass of `ThrowerAnt` that is more costly and watersafe, but otherwise identical to its base class. A `ScubaThrower` should not lose its health when placed in `Water`.
 
-| **Class**                                      | **Food Cost** | **Armor** |
-| ---------------------------------------------- | ------------- | --------- |
-| ![ant_scuba](img/ant_scuba.gif) `ScubaThrower` | 6             | 1         |
+| **Class**                                      | **Food Cost** | **Health** |
+| ---------------------------------------------- | ------------- | ---------- |
+| ![ant_scuba](img/ant_scuba.gif) `ScubaThrower` | 6             | 1          |
 
 We have not provided you with a class header. Implement the `ScubaThrower` class from scratch. Give it a class attribute `name` with the value `'Scuba'` (so that the graphics work) and remember to set the class attribute `implemented` with the value `True` (so that you can use it in a game).
 
@@ -618,9 +618,9 @@ Finally, implement the `QueenAnt`. The queen is a waterproof `ScubaThrower` that
 
 > The reflected damage of a fire ant should not be doubled, only the extra damage it deals when its health is reduced to 0
 
-| **Class**                                  | **Food Cost** | **Armor** |
-| ------------------------------------------ | ------------- | --------- |
-| ![ant_queen](img/ant_queen.gif) `QueenAnt` | 7             | 1         |
+| **Class**                                  | **Food Cost** | **Health** |
+| ------------------------------------------ | ------------- | ---------- |
+| ![ant_queen](img/ant_queen.gif) `QueenAnt` | 7             | 1          |
 
 However, with great power comes great responsibility. The `QueenAnt` is governed by three special rules:
 
@@ -656,9 +656,9 @@ python3 ok -q optional1 -u --local
 
 Implement the `NinjaAnt`, which damages all `Bee`s that pass by, but can never be stung.
 
-| **Class**                                  | **Food Cost** | **Armor** |
-| ------------------------------------------ | ------------- | --------- |
-| ![ant_ninja](img/ant_ninja.gif) `NinjaAnt` | 5             | 1         |
+| **Class**                                  | **Food Cost** | **Health** |
+| ------------------------------------------ | ------------- | ---------- |
+| ![ant_ninja](img/ant_ninja.gif) `NinjaAnt` | 5             | 1          |
 
 A `NinjaAnt` does not block the path of a `Bee` that flies by. To implement this behavior, first modify the `Ant` class to include a new class attribute `blocks_path` that is set to `True`, then override the value of `blocks_path` to `False` in the `NinjaAnt` class.
 
@@ -693,10 +693,10 @@ We will be implementing two new ants that subclass `ThrowerAnt`.
 - `SlowThrower` throws sticky syrup at a bee, applying a slow status for 3 calls.
 - `ScaryThrower` intimidates a nearby bee, causing it to back away instead of advancing. (If the bee is already right next to the Hive and cannot go back further, it should not move. To check if a bee is next to the Hive, you might find the `is_hive` instance method of `Place` useful). The scare status lasts for 2 turns. *Once a bee has been scared once, it can't be scared again.*
 
-| **Class**                                                    | **Food Cost** | **Armor** |
-| ------------------------------------------------------------ | ------------- | --------- |
-| <img src="img/ant_slow.gif" alt="ant_slow" style="zoom:50%;" /> `SlowThrower` | 4             | 1         |
-| <img src="img/ant_scary.gif" alt="ant_scary" style="zoom: 25%;" /> `ScaryThrower` | 6             | 1         |
+| **Class**                                                    | **Food Cost** | **Health** |
+| ------------------------------------------------------------ | ------------- | ---------- |
+| <img src="img/ant_slow.gif" alt="ant_slow" style="zoom:50%;" /> `SlowThrower` | 4             | 1          |
+| <img src="img/ant_scary.gif" alt="ant_scary" style="zoom: 25%;" /> `ScaryThrower` | 6             | 1          |
 
 In order to complete the implementations of these two ants, you will need to set their class attributes appropriately and implement the following three methods on `Bee`s:
 
@@ -739,9 +739,9 @@ Make sure to test your code! Your code should be able to apply multiple statuses
 
 We've been developing this ant for a long time in secret. It's so dangerous that we had to lock it in the super hidden SICP underground vault, but we finally think it is ready to go out on the field. In this problem, you'll be implementing the final ant -- `LaserAnt`, a `ThrowerAnt` with a twist.
 
-| **Class**                                                    | **Food Cost** | **Armor** |
-| ------------------------------------------------------------ | ------------- | --------- |
-| <img src="img/ant_laser.gif" alt="ant_laser" style="zoom: 50%;" /> `LaserAnt` | 10            | 1         |
+| **Class**                                                    | **Food Cost** | **Health** |
+| ------------------------------------------------------------ | ------------- | ---------- |
+| <img src="img/ant_laser.gif" alt="ant_laser" style="zoom: 50%;" /> `LaserAnt` | 10            | 1          |
 
 The `LaserAnt` shoots out a powerful laser, damaging all that dare to stand in its path. Both `Bee`s and `Ant`s, of all types, are at risk of being damaged by `LaserAnt`. When a `LaserAnt` takes its action, it will damage all `Insect`s in its place (excluding itself, but including its container if it has one) and the `Place`s in front of it, excluding the `Hive`.
 
