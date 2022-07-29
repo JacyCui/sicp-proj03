@@ -1,6 +1,6 @@
 test = {
   'name': 'Problem 3',
-  'points': 3,
+  'points': 2,
   'suites': [
     {
       'cases': [
@@ -46,7 +46,18 @@ test = {
           ],
           'hidden': False,
           'locked': True,
-          'question': 'What is the entrance of the first Place in a tunnel?'
+          'question': 'What is the entrance of the first Place in a tunnel (i.e. where do the bees enter from)?'
+        },
+        {
+          'answer': '1882785a9fe9c470b73929020d057fda',
+          'choices': [
+            'by calling the is_hive method on the place instance',
+            'by checking the bees attribute of the place instance',
+            'by checking the ant attribute of the place instance'
+          ],
+          'hidden': False,
+          'locked': True,
+          'question': 'How can you determine is a given Place is the Hive?'
         },
         {
           'answer': '044ef3c0c6fd739b6260fe6f6cae71dd',
@@ -68,8 +79,8 @@ test = {
         {
           'code': r"""
           >>> # Testing nearest_bee
-          >>> near_bee = Bee(2) # A Bee with 2 armor
-          >>> far_bee = Bee(3)  # A Bee with 3 armor
+          >>> near_bee = Bee(2) # A Bee with 2 health
+          >>> far_bee = Bee(3)  # A Bee with 3 health
           >>> near_place = gamestate.places['tunnel_0_3']
           >>> far_place = gamestate.places['tunnel_0_6']
           >>> near_place.add_insect(near_bee)
@@ -81,14 +92,14 @@ test = {
           >>> thrower.nearest_bee(gamestate.beehive) is near_bee
           c7a88a0ffd3aef026b98eef6e7557da3
           # locked
-          >>> nearest_bee.armor
+          >>> nearest_bee.health
           20d533d3e06345c8bd7072212867f2d1
           # locked
           >>> thrower.action(gamestate)    # Attack! ThrowerAnts do 1 damage
-          >>> near_bee.armor
+          >>> near_bee.health
           d89cf7c79d5a479b0f636734143ed5e6
           # locked
-          >>> far_bee.armor
+          >>> far_bee.health
           81a7d27d1a4a958871bb97b545b871db
           # locked
           >>> thrower.place is ant_place    # Don't change self.place!
@@ -107,7 +118,7 @@ test = {
           >>> thrower.nearest_bee(beehive) is bee
           False
           >>> thrower.action(gamestate)    # Attempt to attack
-          >>> bee.armor                 # Bee armor should not change
+          >>> bee.health                 # Bee health should not change
           2
           """,
           'hidden': False,
@@ -121,7 +132,7 @@ test = {
           >>> thrower.nearest_bee(gamestate.beehive) is near_bee
           True
           >>> thrower.action(gamestate)   # Attack!
-          >>> near_bee.armor           # should do 1 damage
+          >>> near_bee.health           # should do 1 damage
           1
           """,
           'hidden': False,
@@ -135,7 +146,7 @@ test = {
           >>> thrower.nearest_bee(gamestate.beehive) is near_bee
           True
           >>> thrower.action(gamestate)   # Attack!
-          >>> near_bee.armor           # should do 1 damage
+          >>> near_bee.health           # should do 1 damage
           1
           """,
           'hidden': False,
@@ -149,7 +160,7 @@ test = {
           >>> thrower.nearest_bee(gamestate.beehive) is near_bee
           True
           >>> thrower.action(gamestate)   # Attack!
-          >>> near_bee.armor           # should do 1 damage
+          >>> near_bee.health           # should do 1 damage
           1
           """,
           'hidden': False,
@@ -169,8 +180,17 @@ test = {
           >>> # Test if damage to bee1 is within 6 standard deviations (~95 damage)
           >>> # If bees are chosen uniformly, this is true 99.9999998% of the time.
           >>> def dmg_within_tolerance():
-          ...     return abs(bee1.armor-501) < 95
+          ...     return abs(bee1.health-501) < 95
           >>> dmg_within_tolerance()
+          True
+          """,
+          'hidden': False,
+          'locked': False
+        },
+        {
+          'code': r"""
+          >>> from ants import *
+          >>> ThrowerAnt.implemented
           True
           """,
           'hidden': False,
@@ -188,24 +208,6 @@ test = {
       >>> ant_place.add_insect(thrower)
       >>> #
       """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'code': r"""
-          >>> from ants import *
-          >>> ThrowerAnt.implemented
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
-          """,
-          'hidden': False,
-          'locked': True
-        }
-      ],
-      'scored': True,
-      'setup': '',
       'teardown': '',
       'type': 'doctest'
     }

@@ -29,11 +29,11 @@ test = {
           'question': 'Which QueenAnt instance is the true QueenAnt?'
         },
         {
-          'answer': '5b60299a3505c6a816e3f5d6d44fa408',
+          'answer': 'efe49ba090a0c931b2f232f4800ce5ca',
           'choices': [
-            'Its armor is reduced to 0 upon taking its first action',
+            'Its health is reduced to 0 upon taking its first action',
             'Nothing, the game ends',
-            'The armor of the first QueenAnt is reduced to 0',
+            'The health of the first QueenAnt is reduced to 0',
             'It doubles the damage of all the ants behind it'
           ],
           'hidden': False,
@@ -92,7 +92,7 @@ test = {
           7cd035adf49fc93a635b4e8bb2e28bd4
           # locked
           >>> queen = QueenAnt()
-          >>> queen.armor
+          >>> queen.health
           d89cf7c79d5a479b0f636734143ed5e6
           # locked
           """,
@@ -103,7 +103,7 @@ test = {
           'code': r"""
           >>> # Abstraction tests
           >>> original = ScubaThrower.__init__
-          >>> ScubaThrower.__init__ = lambda self, armor: print("init") #If this errors, you are not calling the parent constructor correctly.
+          >>> ScubaThrower.__init__ = lambda self, health: print("init") #If this errors, you are not calling the parent constructor correctly.
           >>> queen = QueenAnt()
           init
           >>> ScubaThrower.__init__ = original
@@ -134,7 +134,7 @@ test = {
           >>> tunnel[7].add_insect(front_ant)
           >>> tunnel[4].add_insect(impostor)
           >>> impostor.action(gamestate)
-          >>> impostor.armor            # Impostors must die!
+          >>> impostor.health            # Impostors must die!
           0
           >>> tunnel[4].ant is None
           True
@@ -144,7 +144,7 @@ test = {
           1
           >>> tunnel[4].add_insect(queen)
           >>> queen.action(gamestate)
-          >>> queen.armor               # Long live the Queen!
+          >>> queen.health               # Long live the Queen!
           1
           >>> back_ant.damage           # Ants behind queen should be buffed
           2
@@ -178,7 +178,7 @@ test = {
           >>> queen = ants.QueenAnt()
           >>> water = ants.Water('Water')
           >>> water.add_insect(queen)
-          >>> queen.armor
+          >>> queen.health
           1
           """,
           'hidden': False,
@@ -190,33 +190,38 @@ test = {
           >>> queen_tunnel, side_tunnel = [[gamestate.places['tunnel_{0}_{1}'.format(i, j)]
           ...         for j in range(9)] for i in range(2)]
           >>> # layout
-          >>> # queen_tunnel: [Back, Middle, Queen, Front, Bee     ]
+          >>> # queen_tunnel: [Back, Guard/Guarded, Queen, Front, Bee     ]
           >>> # side_tunnel : [Side,              ,      ,      , Side Bee]
           >>> queen = ants.QueenAnt()
           >>> back = ants.ThrowerAnt()
           >>> front = ants.ThrowerAnt()
-          >>> middle= ants.ThrowerAnt()
+          >>> guard = ants.BodyguardAnt()
+          >>> guarded = ants.ThrowerAnt()
           >>> side = ants.ThrowerAnt()
           >>> bee = ants.Bee(10)
           >>> side_bee = ants.Bee(10)
           >>> queen_tunnel[0].add_insect(back)
-          >>> queen_tunnel[1].add_insect(middle)
+          >>> queen_tunnel[1].add_insect(guard)
+          >>> queen_tunnel[1].add_insect(guarded)
           >>> queen_tunnel[2].add_insect(queen)
           >>> queen_tunnel[3].add_insect(front)
           >>> side_tunnel[0].add_insect(side)
           >>> queen_tunnel[4].add_insect(bee)
           >>> side_tunnel[4].add_insect(side_bee)
           >>> queen.action(gamestate)
-          >>> bee.armor
+          >>> bee.health
           9
           >>> back.action(gamestate)
-          >>> bee.armor
+          >>> bee.health
           7
           >>> front.action(gamestate)
-          >>> bee.armor
+          >>> bee.health
           6
+          >>> guard.action(gamestate)
+          >>> bee.health # if this is 5 you probably forgot to buff the contents of guard
+          4
           >>> side.action(gamestate)
-          >>> side_bee.armor
+          >>> side_bee.health
           9
           """,
           'hidden': False,
@@ -250,7 +255,6 @@ test = {
           >>> bee = ants.Bee(3)
           >>> tunnel[6].add_insect(bee)     # Bee in place with impostor
           >>> bee.action(gamestate)            # Game should not end
-          
           >>> bee.move_to(tunnel[4])        # Bee moved to place with true queen
           >>> bee.action(gamestate)            # Game should end
           BeesWinException
@@ -268,7 +272,7 @@ test = {
           >>> bee = ants.Bee(3)
           >>> gamestate.places['tunnel_0_4'].add_insect(bee)
           >>> queen.action(gamestate)
-          >>> bee.armor # Queen should still hit the bee
+          >>> bee.health # Queen should still hit the bee
           2
           """,
           'hidden': False,
@@ -285,25 +289,22 @@ test = {
           >>> gamestate.places['tunnel_0_1'].add_insect(queen)
           >>> gamestate.places['tunnel_0_2'].add_insect(impostor)
           >>> gamestate.places['tunnel_0_4'].add_insect(bee)
-          
           >>> impostor.action(gamestate)
-          >>> bee.armor   # Impostor should not damage bee
+          >>> bee.health   # Impostor should not damage bee
           10
           >>> ant.damage  # Impostor should not double damage
           1
-          
           >>> queen.action(gamestate)
-          >>> bee.armor   # Queen should damage bee
+          >>> bee.health   # Queen should damage bee
           9
           >>> ant.damage  # Queen should double damage
           2
           >>> ant.action(gamestate)
-          >>> bee.armor   # If failed, ThrowerAnt has incorrect damage
+          >>> bee.health   # If failed, ThrowerAnt has incorrect damage
           7
-          
-          >>> queen.armor   # Long live the Queen
+          >>> queen.health   # Long live the Queen
           1
-          >>> impostor.armor  # Short-lived impostor
+          >>> impostor.health  # Short-lived impostor
           0
           """,
           'hidden': False,
@@ -328,7 +329,7 @@ test = {
           >>> # layout right now
           >>> # [thrower, fire, , , , , , queen, front]
           >>> # [side   ,     , , , , , ,      ,      ]
-          >>> thrower.damage, fire.damage  = 101, 102,
+          >>> thrower.damage, fire.damage = 101, 102
           >>> front.damage, side.damage = 104, 105
           >>> queen.action(gamestate)
           >>> (thrower.damage, fire.damage)
@@ -336,37 +337,57 @@ test = {
           >>> (front.damage, side.damage)
           (104, 105)
           >>> # Turn 1
+          >>> tank = ants.TankAnt()
+          >>> guard = ants.BodyguardAnt()
+          >>> queen_tank = ants.TankAnt()
+          >>> queen_tunnel[6].add_insect(tank)          # Not protecting an ant
+          >>> queen_tunnel[1].add_insect(guard)         # Guarding FireAnt
+          >>> queen_tunnel[7].add_insect(queen_tank)    # Guarding QueenAnt
           >>> # layout right now
-          >>> # [thrower, fire, , , , , , queen, front]
-          >>> # [side   ,     , , , , , ,      ,      ]
+          >>> # [thrower, guard/fire, , , , , tank, queen_tank/queen, front]
+          >>> # [side   ,           , , , , ,     ,                 ,      ]
+          >>> tank.damage, guard.damage, queen_tank.damage = 1001, 1002, 1003
           >>> queen.action(gamestate)
           >>> # unchanged
           >>> (thrower.damage, fire.damage)
           (202, 204)
           >>> (front.damage, side.damage)
           (104, 105)
+          >>> (tank.damage, guard.damage)
+          (2002, 2004)
+          >>> queen_tank.damage
+          1003
           >>> # Turn 2
           >>> thrower1 = ants.ThrowerAnt()
           >>> thrower2 = ants.ThrowerAnt()
-          >>> queen_tunnel[6].add_insect(thrower1)
+          >>> queen_tunnel[6].add_insect(thrower1)      # Add thrower1 in TankAnt
           >>> queen_tunnel[5].add_insect(thrower2)
           >>> # layout right now
-          >>> # [thrower, fire, , , , thrower2, thrower1, queen, front]
-          >>> # [side   ,     , , , ,         ,         ,      ,      ]
+          >>> # [thrower, guard/fire, , , , thrower2, tank/thrower1, queen_tank/queen, front]
+          >>> # [side   ,           , , , ,         ,              ,                 ,      ]
           >>> thrower1.damage, thrower2.damage = 10001, 10002
           >>> queen.action(gamestate)
           >>> (thrower.damage, fire.damage)
           (202, 204)
           >>> (front.damage, side.damage)
           (104, 105)
+          >>> (tank.damage, guard.damage)
+          (2002, 2004)
+          >>> queen_tank.damage
+          1003
           >>> (thrower1.damage, thrower2.damage)
           (20002, 20004)
           >>> # Turn 3
+          >>> tank.reduce_health(tank.health)             # Expose thrower1
           >>> queen.action(gamestate)
           >>> (thrower.damage, fire.damage)
           (202, 204)
           >>> (front.damage, side.damage)
           (104, 105)
+          >>> guard.damage
+          2004
+          >>> queen_tank.damage
+          1003
           >>> (thrower1.damage, thrower2.damage)
           (20002, 20004)
           """,
@@ -375,16 +396,26 @@ test = {
         },
         {
           'code': r"""
-          >>> # Adding/Removing QueenAnt
+          >>> # Adding/Removing QueenAnt with Container
           >>> place = gamestate.places['tunnel_0_3']
           >>> queen = ants.QueenAnt()
           >>> impostor = ants.QueenAnt()
+          >>> container = ants.TankAnt()
+          >>> place.add_insect(container)
           >>> place.add_insect(impostor)
           >>> impostor.action(gamestate)
+          >>> place.ant is container
+          True
+          >>> container.place is place
+          True
+          >>> container.contained_ant is None
+          True
           >>> impostor.place is None
           True
           >>> place.add_insect(queen)
           >>> place.remove_insect(queen)
+          >>> container.contained_ant is queen
+          True
           >>> queen.place is place
           True
           >>> queen.action(gamestate) # should not error
@@ -407,6 +438,15 @@ test = {
           """,
           'hidden': False,
           'locked': False
+        },
+        {
+          'code': r"""
+          >>> from ants import *
+          >>> QueenAnt.implemented
+          True
+          """,
+          'hidden': False,
+          'locked': False
         }
       ],
       'scored': True,
@@ -419,24 +459,6 @@ test = {
       ...         ants.dry_layout, dimensions)
       >>> #
       """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'code': r"""
-          >>> from ants import *
-          >>> QueenAnt.implemented
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
-          """,
-          'hidden': False,
-          'locked': True
-        }
-      ],
-      'scored': True,
-      'setup': '',
       'teardown': '',
       'type': 'doctest'
     }

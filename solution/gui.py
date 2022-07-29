@@ -70,7 +70,7 @@ class GUI:
         importlib.reload(ants) # resets ants, e.g. with newly implemented Ants
         self.makeHooks()
 
-        self.winner = ants_strategies.start_with_strategy(gui.args, gui.strategy)
+        self.winner = ants_strategies.start_with_strategy(gui.args, gui.strategy, ants)
         self.gameOver = True
         self.saveState("winner", self.winner)
         self.saveState("gameOver", self.gameOver)
@@ -167,7 +167,7 @@ class GUI:
             self.places[gamestate.beehive.name]["insects"].append({"id": self.currentBeeId, "type": "bee"})
             self.beeToId[bee] = self.currentBeeId
             self.currentBeeId += 1
-        self.saveState("rows", rows)
+        self.saveState("rows", len(self.places))
         self.saveState("places", self.places);
 
 
@@ -281,7 +281,7 @@ class HttpHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(response.encode('ascii'))
 
 def dead_insect(ant):
-    print('{0} ran out of armor and expired'.format(ant))
+    print('{0} ran out of health and expired'.format(ant))
     if ant in gui.insectToId:
         gui.deadinsects.append(gui.insectToId[ant])
         gui.saveState("deadinsects", gui.deadinsects)

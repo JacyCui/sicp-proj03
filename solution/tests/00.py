@@ -8,8 +8,8 @@ test = {
           'answer': '3c1938b66de6e3576c7794432ca0d1f8',
           'choices': [
             r"""
-            It represents armor protecting the insect, so the insect can only
-            be damaged when its armor reaches 0
+            It represents health protecting the insect, so the insect can only
+            be damaged when its health reaches 0
             """,
             r"""
             It represents the strength of an insect against attacks, which
@@ -23,7 +23,7 @@ test = {
           'hidden': False,
           'locked': True,
           'question': r"""
-          What is the significance of an Insect's armor attribute? Does this
+          What is the significance of an Insect's health attribute? Does this
           value change? If so, how?
           """
         },
@@ -31,7 +31,7 @@ test = {
           'answer': '94e2e146454b38059092b5bbfd866e20',
           'choices': [
             'damage',
-            'armor',
+            'health',
             'place',
             'bees'
           ],
@@ -40,16 +40,16 @@ test = {
           'question': 'Which of the following is a class attribute of the Insect class?'
         },
         {
-          'answer': '3b67a79439a25057a2cf96401a29af81',
+          'answer': 'f6d580bd3e0db93da86510c934fd4554',
           'choices': [
-            'instance, each Ant instance needs its own armor value',
-            'instance, each Ant starts out with a different amount of armor',
-            'class, Ants of the same subclass all have the same amount of starting armor',
+            'instance, each Ant instance needs its own health value',
+            'instance, each Ant starts out with a different amount of health',
+            'class, Ants of the same subclass all have the same amount of starting health',
             'class, when one Ant gets damaged, all ants receive the same amount of damage'
           ],
           'hidden': False,
           'locked': True,
-          'question': 'Is the armor attribute of the Ant class an instance attribute or class attribute? Why?'
+          'question': 'Is the health attribute of the Ant class an instance attribute or class attribute? Why?'
         },
         {
           'answer': '6a4a860840218ef3b1d91d54643165f5',
@@ -79,22 +79,22 @@ test = {
           'question': 'Which class do both Ant and Bee inherit from?'
         },
         {
-          'answer': '267ecbf283d7478a64fde7c4933d22ad',
+          'answer': '2f58d2097027c9718255dd5a02944c22',
           'choices': [
             r"""
-            Ants and Bees both have the attributes armor, damage, and place
-            and the methods reduce_armor and action
+            Ants and Bees both have the attributes health, damage, and place
+            and the methods reduce_health and action
             """,
             r"""
             Ants and Bees both have the attribute damage and the methods
-            reduce_armor and action
+            reduce_health and action
             """,
             'Ants and Bees both take the same action each turn',
             'Ants and Bees have nothing in common'
           ],
           'hidden': False,
           'locked': True,
-          'question': 'What do instances of Ant and instances of Bee have in common?'
+          'question': 'What do instances of Ant and instances of Bee have in common? Please choose the most correct answer.'
         },
         {
           'answer': '4eed0239468d72e9a26a9a6f2968e76f',
@@ -108,7 +108,7 @@ test = {
           'locked': True,
           'question': r"""
           How many insects can be in a single Place at any given time in the
-          game?
+          game (before Problem 8)?
           """
         },
         {

@@ -1,6 +1,6 @@
 test = {
   'name': 'Problem 2',
-  'points': 3,
+  'points': 2,
   'suites': [
     {
       'cases': [
@@ -42,7 +42,7 @@ test = {
           'question': 'p is a Place whose entrance is q and exit is r (q and r are not None). When is p.exit first set to a non-None value?'
         }
       ],
-      'scored': True,
+      'scored': False,
       'type': 'concept'
     },
     {

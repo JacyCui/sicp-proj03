@@ -11,7 +11,7 @@ def class_method_wrapper(method, pre=None, post=None):
     ...     print('Pre-wrapper called: {0}'.format(args))
     >>> def post_wrapper(instance, rv, *args):
     ...     print('Post-wrapper called: {0} -> {1}'.format(args, rv))
-    >>> class Foo(object):
+    >>> class Foo:
     ...     def __init__(self):
     ...         self.bar = 20
     ...     def method(self, var1, var2):
@@ -34,25 +34,25 @@ def class_method_wrapper(method, pre=None, post=None):
     return wrapped_method
 
 def print_expired_insects(self, rv, *args):
-    """Post-wrapper for Insect.reduce_armor, and will print a message if the
-    insect has expired (armor reduced to 0).
+    """Post-wrapper for Insect.reduce_health, and will print a message if the
+    insect has expired (health reduced to 0).
 
     >>> from ants import Insect, Bee, ThrowerAnt, Place
-    >>> Insect.reduce_armor = class_method_wrapper(Insect.reduce_armor,
+    >>> Insect.reduce_health = class_method_wrapper(Insect.reduce_health,
     ...         pre=print_expired_insects)
     >>> place = Place('Test')
     >>> bee = Bee(3)
     >>> place.add_insect(bee)
-    >>> bee.reduce_armor(2)
-    >>> bee.reduce_armor(1)
-    Bee(Test) ran out of armor and expired
+    >>> bee.reduce_health(2)
+    >>> bee.reduce_health(1)
+    Bee(Test) ran out of health and expired
     >>> thrower = ThrowerAnt()
     >>> place.add_insect(thrower)
-    >>> thrower.reduce_armor(1)
-    ThrowerAnt(Test) ran out of armor and expired
+    >>> thrower.reduce_health(1)
+    ThrowerAnt(Test) ran out of health and expired
     """
-    if self.armor <= args[0]:
-        print('{0}({1}) ran out of armor and expired'.format(
+    if self.health <= args[0]:
+        print('{0}({1}) ran out of health and expired'.format(
             type(self).__name__, self.place))
 
 def print_thrower_target(self, rv, *args):

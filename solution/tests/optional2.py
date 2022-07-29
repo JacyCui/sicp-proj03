@@ -5,86 +5,21 @@ test = {
     {
       'cases': [
         {
-          'answer': 'c9e4559526ed96dcae3a8a67e48f2539',
-          'choices': [
-            'The Ant instance that is in the same place as itself',
-            'The Ant instance in the place closest to its own place',
-            'A random Ant instance in the gamestate',
-            'All the Ant instances in the gamestate'
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'Which Ant does a BodyguardAnt guard?'
-        },
-        {
-          'answer': '22a2c7eb1d7adee7ea4eb970d3cc09e9',
-          'choices': [
-            'By protecting the ant from Bees and allowing it to perform its original action',
-            'By attacking Bees that try to attack it',
-            "By increasing the ant's armor",
-            'By allowing Bees to pass without attacking'
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'How does a BodyguardAnt guard its ant?'
-        },
-        {
-          'answer': 'e5029f38ae9a6b212c532cf07d08d994',
-          'choices': [
-            "In the BodyguardAnt's contained_ant instance attribute",
-            "In the BodyguardAnt's contained_ant class attribute",
-            "In its place's ant instance attribute",
-            "Nowhere, a BodyguardAnt has no knowledge of the ant that it's protecting"
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'Where is the ant contained by a BodyguardAnt stored?'
-        },
-        {
-          'answer': '7a81f10493cb9dd2a778afa061e3edd5',
-          'choices': [
-            r"""
-            When exactly one of the Ant instances is a container and the
-            container ant does not already contain another ant
-            """,
-            'When exactly one of the Ant instances is a container',
-            'When both Ant instances are containers',
-            'There can never be two Ant instances in the same place'
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': 'When can a second Ant be added to a place that already contains an Ant?'
-        },
-        {
-          'answer': '15da5c3b3f44c437c3da5155a6d0c267',
-          'choices': [
-            'The container Ant',
-            'The Ant being contained',
-            'A list containing both Ants',
-            'Whichever Ant was placed there first'
-          ],
-          'hidden': False,
-          'locked': True,
-          'question': r"""
-          If two Ants occupy the same Place, what is stored in that place's ant
-          instance attribute?
-          """
-        }
-      ],
-      'scored': False,
-      'type': 'concept'
-    },
-    {
-      'cases': [
-        {
           'code': r"""
-          >>> # Testing BodyguardAnt parameters
-          >>> bodyguard = BodyguardAnt()
-          >>> BodyguardAnt.food_cost
+          >>> # Testing status parameters
+          >>> slow = SlowThrower()
+          >>> scary = ScaryThrower()
+          >>> SlowThrower.food_cost
           c9452203eb0b0f0bd2454586a6c2fc5c
           # locked
-          >>> bodyguard.armor
-          20d533d3e06345c8bd7072212867f2d1
+          >>> ScaryThrower.food_cost
+          50ae32be3e31df6c59633df7fdfb3a72
+          # locked
+          >>> slow.health
+          d89cf7c79d5a479b0f636734143ed5e6
+          # locked
+          >>> scary.health
+          d89cf7c79d5a479b0f636734143ed5e6
           # locked
           """,
           'hidden': False,
@@ -92,227 +27,268 @@ test = {
         },
         {
           'code': r"""
-          >>> # Abstraction tests
-          >>> original = ContainerAnt.__init__
-          >>> ContainerAnt.__init__ = lambda self, armor: print("init") #If this errors, you are not calling the parent constructor correctly.
-          >>> bodyguard = BodyguardAnt()
-          init
-          >>> ContainerAnt.__init__ = original
-          >>> bodyguard = BodyguardAnt()
-          >>> hasattr(bodyguard, 'contained_ant')
-          True
-          """,
-          'hidden': False,
-          'locked': False
-        }
-      ],
-      'scored': True,
-      'setup': r"""
-      >>> from ants import *
-      """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'code': r"""
-          >>> bodyguard = BodyguardAnt()
-          >>> bodyguard.action(gamestate) # Action without contained ant should not error
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing bodyguard performs thrower's action
-          >>> bodyguard = BodyguardAnt()
-          >>> thrower = ThrowerAnt()
-          >>> bee = Bee(2)
-          >>> # Place bodyguard before thrower
-          >>> gamestate.places["tunnel_0_0"].add_insect(bodyguard)
-          >>> gamestate.places["tunnel_0_0"].add_insect(thrower)
-          >>> gamestate.places["tunnel_0_3"].add_insect(bee)
-          >>> bodyguard.action(gamestate)
-          >>> bee.armor
-          1
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing bodyguard performs thrower's action
-          >>> bodyguard = BodyguardAnt()
-          >>> thrower = ThrowerAnt()
-          >>> bee = Bee(2)
-          >>> # Place thrower before bodyguard
-          >>> gamestate.places["tunnel_0_0"].add_insect(thrower)
-          >>> gamestate.places["tunnel_0_0"].add_insect(bodyguard)
-          >>> gamestate.places["tunnel_0_3"].add_insect(bee)
-          >>> bodyguard.action(gamestate)
-          >>> bee.armor
-          1
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing removing a bodyguard doesn't remove contained ant
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> bodyguard = BodyguardAnt()
-          >>> test_ant = Ant(1)
-          >>> # add bodyguard first
-          >>> place.add_insect(bodyguard)
-          >>> place.add_insect(test_ant)
-          >>> gamestate.remove_ant('tunnel_0_0')
-          >>> place.ant is test_ant
-          True
-          >>> bodyguard.place is None
-          True
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing removing a bodyguard doesn't remove contained ant
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> bodyguard = BodyguardAnt()
-          >>> test_ant = Ant(1)
-          >>> # add ant first
-          >>> place.add_insect(test_ant)
-          >>> place.add_insect(bodyguard)
-          >>> gamestate.remove_ant('tunnel_0_0')
-          >>> place.ant is test_ant
-          True
-          >>> bodyguard.place is None
-          True
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing bodyguarded ant keeps instance attributes
-          >>> test_ant = Ant()
-          >>> def new_action(gamestate):
-          ...     test_ant.armor += 9000
-          >>> test_ant.action = new_action
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> bodyguard = BodyguardAnt()
-          >>> place.add_insect(test_ant)
-          >>> place.add_insect(bodyguard)
-          >>> place.ant.action(gamestate)
-          >>> place.ant.contained_ant.armor
-          9001
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing single BodyguardAnt cannot hold two other ants
-          >>> bodyguard = BodyguardAnt()
-          >>> first_ant = ThrowerAnt()
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> place.add_insect(bodyguard)
-          >>> place.add_insect(first_ant)
-          >>> second_ant = ThrowerAnt()
-          >>> place.add_insect(second_ant)
-          Traceback (most recent call last):
-          ...
-          AssertionError: Two ants in tunnel_0_0
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing BodyguardAnt cannot hold another BodyguardAnt
-          >>> bodyguard1 = BodyguardAnt()
-          >>> bodyguard2 = BodyguardAnt()
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> place.add_insect(bodyguard1)
-          >>> place.add_insect(bodyguard2)
-          Traceback (most recent call last):
-          ...
-          AssertionError: Two ants in tunnel_0_0
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # Testing BodyguardAnt takes all the damage
-          >>> thrower = ThrowerAnt()
-          >>> bodyguard = BodyguardAnt()
-          >>> bee = Bee(1)
-          >>> place = gamestate.places['tunnel_0_0']
-          >>> place.add_insect(thrower)
-          >>> place.add_insect(bodyguard)
-          >>> place.add_insect(bee)
-          >>> bodyguard.armor
-          2
-          >>> bee.action(gamestate)
-          >>> (bodyguard.armor, thrower.armor)
-          (1, 1)
-          >>> bee.action(gamestate)
-          >>> (bodyguard.armor, thrower.armor)
-          (0, 1)
-          >>> bodyguard.place is None
-          True
-          >>> place.ant is thrower
-          True
-          >>> bee.action(gamestate)
-          >>> thrower.armor
-          0
-          >>> place.ant is None
-          True
-          """,
-          'hidden': False,
-          'locked': False
-        },
-        {
-          'code': r"""
-          >>> # test proper call to death callback
-          >>> original_death_callback = Insect.death_callback
-          >>> Insect.death_callback = lambda x: print("insect died")
-          >>> place = gamestate.places["tunnel_0_0"]
+          >>> # Testing Slow
+          >>> slow = SlowThrower()
           >>> bee = Bee(3)
-          >>> bodyguard = BodyguardAnt()
-          >>> ant = ThrowerAnt()
-          >>> place.add_insect(bee)
-          >>> place.add_insect(ant)
-          >>> place.add_insect(bodyguard)
+          >>> gamestate.places["tunnel_0_0"].add_insect(slow)
+          >>> gamestate.places["tunnel_0_4"].add_insect(bee)
+          >>> slow.action(gamestate)
+          >>> gamestate.time = 1
           >>> bee.action(gamestate)
+          >>> bee.place.name # SlowThrower should cause slowness on odd turns
+          040b6ad98a7360eba8d493c250a9b82e
+          # locked
+          >>> gamestate.time += 1
           >>> bee.action(gamestate)
-          insect died
-          >>> bee.action(gamestate) # if you fail this test you probably didn't correctly call Ant.reduce_armor or Insect.reduce_armor
-          insect died
-          >>> Insect.death_callback = original_death_callback
+          >>> bee.place.name # SlowThrower should cause slowness on odd turns
+          8344c19df8015306b462119efc8419cb
+          # locked
+          >>> for _ in range(3):
+          ...    gamestate.time += 1
+          ...    bee.action(gamestate)
+          >>> bee.place.name
+          7f44338412808161209e944b1ee0f78c
+          # locked
+          """,
+          'hidden': False,
+          'locked': True
+        },
+        {
+          'code': r"""
+          >>> # Testing Scare
+          >>> scary = ScaryThrower()
+          >>> bee = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scary)
+          >>> gamestate.places["tunnel_0_4"].add_insect(bee)
+          >>> scary.action(gamestate)
+          >>> bee.action(gamestate)
+          >>> bee.place.name # ScaryThrower should scare for two turns
+          46f9851313dc368f747e69f1670450da
+          # locked
+          >>> bee.action(gamestate)
+          >>> bee.place.name # ScaryThrower should scare for two turns
+          32a5320f2c5021a9b66582af8b364dc7
+          # locked
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          46f9851313dc368f747e69f1670450da
+          # locked
+          """,
+          'hidden': False,
+          'locked': True
+        },
+        {
+          'code': r"""
+          >>> # Scary stings an ant
+          >>> scary = ScaryThrower()
+          >>> harvester = HarvesterAnt()
+          >>> bee = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scary)
+          >>> gamestate.places["tunnel_0_4"].add_insect(bee)
+          >>> gamestate.places["tunnel_0_5"].add_insect(harvester)
+          >>> scary.action(gamestate)
+          >>> bee.action(gamestate)
+          >>> bee.place.name # ScaryThrower should scare for two turns
+          46f9851313dc368f747e69f1670450da
+          # locked
+          >>> harvester.health
+          d89cf7c79d5a479b0f636734143ed5e6
+          # locked
+          >>> bee.action(gamestate)
+          >>> harvester.health
+          73b94a1326ae2e803c3421016112207b
+          # locked
+          """,
+          'hidden': False,
+          'locked': True
+        },
+        {
+          'code': r"""
+          >>> # Testing if statuses stack
+          >>> slow = SlowThrower()
+          >>> bee = Bee(3)
+          >>> slow_place = gamestate.places["tunnel_0_0"]
+          >>> bee_place = gamestate.places["tunnel_0_8"]
+          >>> slow_place.add_insect(slow)
+          >>> bee_place.add_insect(bee)
+          >>> slow.action(gamestate)    # slow bee two times
+          >>> slow.action(gamestate)
+          >>> gamestate.time = 1
+          >>> bee.action(gamestate) # do nothing. The outer slow has 2 turns to go, the inner one still has 3 turns
+          >>> bee.place.name
+          'tunnel_0_8'
+          >>> gamestate.time = 2
+          >>> bee.action(gamestate) # moves forward. The outer slow has 1 turn to go, the inner one has 2 turns
+          >>> bee.place.name
+          'tunnel_0_7'
+          >>> gamestate.time = 3
+          >>> bee.action(gamestate) # do nothing. The outer slow has no turns left, the inner one has 2 turns
+          >>> bee.place.name
+          'tunnel_0_7'
+          >>> gamestate.time = 4
+          >>> bee.action(gamestate) # moves forward. The inner slow has 1 turn
+          >>> bee.place.name
+          'tunnel_0_6'
+          >>> gamestate.time = 5
+          >>> bee.action(gamestate) # does nothing. The inner slow has no turns
+          >>> bee.place.name
+          'tunnel_0_6'
+          >>> gamestate.time = 6      # slow status have worn off
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_5'
+          >>> gamestate.time = 7      # slow status have worn off
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 8      # slow status have worn off
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_3'
           """,
           'hidden': False,
           'locked': False
-        }
-      ],
-      'scored': True,
-      'setup': r"""
-      >>> from ants import *
-      >>> beehive, layout = Hive(AssaultPlan()), dry_layout
-      >>> gamestate = GameState(None, beehive, ant_types(), layout, (1, 9))
-      >>> #
-      """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
+        },
         {
           'code': r"""
-          >>> from ants import *
-          >>> BodyguardAnt.implemented
+          >>> # Testing multiple scared bees
+          >>> scare1 = ScaryThrower()
+          >>> scare2 = ScaryThrower()
+          >>> bee1 = Bee(3)
+          >>> bee2 = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scare1)
+          >>> gamestate.places["tunnel_0_1"].add_insect(bee1)
+          >>> gamestate.places["tunnel_0_4"].add_insect(scare2)
+          >>> gamestate.places["tunnel_0_5"].add_insect(bee2)
+          >>> scare1.action(gamestate)
+          >>> scare2.action(gamestate)
+          >>> bee1.action(gamestate)
+          >>> bee2.action(gamestate)
+          >>> bee1.place.name
+          'tunnel_0_2'
+          >>> bee2.place.name
+          'tunnel_0_6'
+          >>> bee1.action(gamestate)
+          >>> bee2.action(gamestate)
+          >>> bee1.place.name
+          'tunnel_0_3'
+          >>> bee2.place.name
+          'tunnel_0_7'
+          >>> bee1.action(gamestate)
+          >>> bee2.action(gamestate)
+          >>> bee1.place.name
+          'tunnel_0_2'
+          >>> bee2.place.name
+          'tunnel_0_6'
+          """,
+          'hidden': False,
+          'locked': False
+        },
+        {
+          'code': r"""
+          >>> scare = ScaryThrower()
+          >>> bee = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scare)
+          >>> gamestate.places["tunnel_0_1"].add_insect(bee)
+          >>> scare.action(gamestate)
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_2'
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_3'
+          >>> #
+          >>> # Same bee should not be scared more than once
+          >>> scare.action(gamestate)
+          >>> bee.action(gamestate)
+          >>> bee.place.name
+          'tunnel_0_2'
+          """,
+          'hidden': False,
+          'locked': False
+        },
+        {
+          'code': r"""
+          >>> # Testing long status stack
+          >>> scary = ScaryThrower()
+          >>> slow = SlowThrower()
+          >>> bee = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scary)
+          >>> gamestate.places["tunnel_0_1"].add_insect(slow)
+          >>> gamestate.places["tunnel_0_3"].add_insect(bee)
+          >>> scary.action(gamestate) # scare bee once
+          >>> gamestate.time = 0
+          >>> bee.action(gamestate) # scared
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> for _ in range(3): # slow bee three times
+          ...    slow.action(gamestate)
+          >>> gamestate.time = 1
+          >>> bee.action(gamestate) # scared, but also slowed thrice
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 2
+          >>> bee.action(gamestate) # scared and slowed thrice
+          >>> bee.place.name
+          'tunnel_0_5'
+          >>> gamestate.time = 3
+          >>> bee.action(gamestate) # slowed thrice
+          >>> bee.place.name
+          'tunnel_0_5'
+          >>> gamestate.time = 4
+          >>> bee.action(gamestate) # slowed twice
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 5
+          >>> bee.action(gamestate) # slowed twice
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 6
+          >>> bee.action(gamestate) # slowed once
+          >>> bee.place.name
+          'tunnel_0_3'
+          >>> gamestate.time = 7
+          >>> bee.action(gamestate) # statuses have worn off
+          >>> bee.place.name
+          'tunnel_0_2'
+          """,
+          'hidden': False,
+          'locked': False
+        },
+        {
+          'code': r"""
+          >>> scary = ScaryThrower()
+          >>> slow = SlowThrower()
+          >>> bee = Bee(3)
+          >>> gamestate.places["tunnel_0_0"].add_insect(scary)
+          >>> gamestate.places["tunnel_0_1"].add_insect(slow)
+          >>> gamestate.places["tunnel_0_3"].add_insect(bee)
+          >>> slow.action(gamestate) # slow bee
+          >>> scary.action(gamestate) # scare bee
+          >>> bee.place.name
+          'tunnel_0_3'
+          >>> gamestate.time = 0
+          >>> bee.action(gamestate) # scared and slowed
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 1
+          >>> bee.action(gamestate) # scared and slowed
+          >>> bee.place.name
+          'tunnel_0_4'
+          >>> gamestate.time = 2
+          >>> bee.action(gamestate) # slowed
+          >>> bee.place.name
+          'tunnel_0_3'
+          """,
+          'hidden': False,
+          'locked': False
+        },
+        {
+          'code': r"""
+          >>> ScaryThrower.implemented
+          c7a88a0ffd3aef026b98eef6e7557da3
+          # locked
+          >>> SlowThrower.implemented
           c7a88a0ffd3aef026b98eef6e7557da3
           # locked
           """,
@@ -321,7 +297,12 @@ test = {
         }
       ],
       'scored': True,
-      'setup': '',
+      'setup': r"""
+      >>> from ants import *
+      >>> beehive, layout = Hive(AssaultPlan()), dry_layout
+      >>> dimensions = (1, 9)
+      >>> gamestate = GameState(None, beehive, ant_types(), layout, dimensions)
+      """,
       'teardown': '',
       'type': 'doctest'
     }

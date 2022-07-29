@@ -25,10 +25,10 @@ test = {
           'question': 'What is the purpose of the food_cost attribute?'
         },
         {
-          'answer': 'a2025d9f82f64cc8a211c3dbc92f507b',
+          'answer': '2d3f4f6f9e9a083f23302e78084d5448',
           'choices': [
-            'class, all Ants of the same subclass cost the same to deploy',
-            'class, all Ants cost the same to deploy no matter what type of Ant it is',
+            'class, all Ants of the same subclass cost the same to place',
+            'class, all Ants cost the same to place no matter what type of Ant it is',
             'instance, the food_cost of an Ant depends on the location it is placed',
             'instance, the food_cost of an Ant is randomized upon initialization'
           ],
@@ -37,7 +37,7 @@ test = {
           'question': 'What type of attribute is food_cost?'
         }
       ],
-      'scored': True,
+      'scored': False,
       'type': 'concept'
     },
     {
@@ -80,6 +80,15 @@ test = {
           """,
           'hidden': False,
           'locked': True
+        },
+        {
+          'code': r"""
+          >>> from ants import *
+          >>> HarvesterAnt.implemented
+          True
+          """,
+          'hidden': False,
+          'locked': False
         }
       ],
       'scored': True,
@@ -87,24 +96,6 @@ test = {
       >>> from ants import *
       >>> from ants_plans import *
       """,
-      'teardown': '',
-      'type': 'doctest'
-    },
-    {
-      'cases': [
-        {
-          'code': r"""
-          >>> from ants import *
-          >>> HarvesterAnt.implemented
-          c7a88a0ffd3aef026b98eef6e7557da3
-          # locked
-          """,
-          'hidden': False,
-          'locked': True
-        }
-      ],
-      'scored': True,
-      'setup': '',
       'teardown': '',
       'type': 'doctest'
     }

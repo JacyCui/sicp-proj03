@@ -47,10 +47,10 @@ test = {
           'question': 'When is the path of a Bee blocked?'
         },
         {
-          'answer': '484c0146f4f3467577dbd39913dde34b',
+          'answer': '94f9395e9fd1d730fd15d335ecdaedd2',
           'choices': [
-            "Reduces the Bee's armor by the NinjaAnt's damage attribute",
-            "Reduces the Bee's armor to 0",
+            "Reduces the Bee's health by the NinjaAnt's damage attribute",
+            "Reduces the Bee's health to 0",
             "Nothing, the NinjaAnt doesn't damage Bees",
             "Blocks the Bee's path"
           ],
@@ -68,7 +68,7 @@ test = {
           'code': r"""
           >>> # Testing NinjaAnt parameters
           >>> ninja = NinjaAnt()
-          >>> ninja.armor
+          >>> ninja.health
           d89cf7c79d5a479b0f636734143ed5e6
           # locked
           >>> NinjaAnt.food_cost
@@ -112,7 +112,7 @@ test = {
           >>> bee.place is p0
           c7a88a0ffd3aef026b98eef6e7557da3
           # locked
-          >>> ninja.armor
+          >>> ninja.health
           d89cf7c79d5a479b0f636734143ed5e6
           # locked
           >>> bee.action(gamestate)
@@ -142,7 +142,7 @@ test = {
           >>> bee.place is p0
           c7a88a0ffd3aef026b98eef6e7557da3
           # locked
-          >>> ninja_fire.armor
+          >>> ninja_fire.health
           d89cf7c79d5a479b0f636734143ed5e6
           # locked
           >>> bee.action(gamestate)
@@ -162,7 +162,7 @@ test = {
           >>> ninja = NinjaAnt()
           >>> test_place.add_insect(ninja)
           >>> ninja.action(gamestate)   # should strike all bees in place
-          >>> [bee.armor for bee in test_place.bees]
+          >>> [bee.health for bee in test_place.bees]
           [1, 1, 1]
           """,
           'hidden': False,
@@ -178,7 +178,7 @@ test = {
           >>> ninja.damage = 50
           >>> test_place.add_insect(ninja)
           >>> ninja.action(gamestate)   # should strike all bees in place
-          >>> [bee.armor for bee in test_place.bees]
+          >>> [bee.health for bee in test_place.bees]
           [50, 50, 50]
           """,
           'hidden': False,
@@ -209,7 +209,7 @@ test = {
           >>> buffNinja.damage = 500  # Sharpen the sword
           >>> place.add_insect(buffNinja)
           >>> buffNinja.action(gamestate)
-          >>> bee.armor
+          >>> bee.health
           400
           """,
           'hidden': False,
