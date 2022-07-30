@@ -737,6 +737,12 @@ Make sure to test your code! Your code should be able to apply multiple statuses
 
 ### Optional Problem 3
 
+Before writing any code, read the instructions and test your understanding of the problem:
+
+```shell
+python3 ok -q optional3 -u --local
+```
+
 We've been developing this ant for a long time in secret. It's so dangerous that we had to lock it in the super hidden SICP underground vault, but we finally think it is ready to go out on the field. In this problem, you'll be implementing the final ant -- `LaserAnt`, a `ThrowerAnt` with a twist.
 
 | **Class**                                                    | **Food Cost** | **Health** |
