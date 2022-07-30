@@ -22,7 +22,22 @@ This project combines functional and object-oriented programming paradigms, focu
 
 ## Final Product
 
+When you finish the project, you'll have implemented a significant part of this game yourself!
 
+**Note** that since the graphical interface requires support from Berkeley's remote server, you need to enable the proxy on your computer to run the graphical interface properly.
+
+You can have an exploration of it by doing this:
+
+```shell
+cd solution
+python3 gui.py -w --food 10 -d normal
+```
+
+> You will get a graphic user interface in your local browser with game logic implemented in my solution.
+
+![gui1](img/gui1.png)
+
+![gui2](img/gui2.png)
 
 
 
@@ -785,16 +800,3 @@ python3 gui.py [-h] [-d DIFFICULTY] [-w] [--food FOOD]
 **Acknowledgments:** Tom Magrino and Eric Tzeng developed this project with John DeNero. Jessica Wan contributed the original artwork. Joy Jeng and Mark Miyashita invented the queen ant. Many others have contributed to the project as well!
 
 The new concept artwork was drawn by Alana Tran, Andrew Huang, Emilee Chen, Jessie Salas, Jingyi Li, Katherine Xu, Meena Vempaty, Michelle Chang, and Ryan Davis.
-
-
-
-
-
-
-
-
-
-
-
-
-
