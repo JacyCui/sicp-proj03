@@ -438,7 +438,7 @@ class QueenAnt(ScubaThrower):  # You should change this line
             QueenAnt.queen_count -= 1
             return
         place = self.place.exit
-        while place:
+        while not isinstance(place, AntHomeBase):
             if place.ant and not hasattr(place.ant, 'inspired'):
                 place.ant.damage, place.ant.inspired = place.ant.damage * 2, True
             if place.ant and place.ant.is_container() and place.ant.contained_ant and not hasattr(place.ant.contained_ant, 'inspired'):
@@ -472,6 +472,11 @@ class AntRemover(Ant):
     def __init__(self):
         super().__init__(0)
 
+    # def add_to(self, place):
+    #     if place.ant and place.ants.is_container() and place.ant.contained_ant:
+    #         place.ant = place.ant.contained_ant
+    #     else:
+    #         place.ant = None
 
 class Bee(Insect):
     """A Bee moves from place to place, following exits and stinging ants."""
